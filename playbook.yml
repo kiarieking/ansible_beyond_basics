@@ -8,6 +8,9 @@
       service: name=apache2 state=restarted
 
   tasks:
+    - name: Install Apache2
+      apt: update_cache=true name=apache2 state=present
+
     - name: Enable Apache rewrite module.
       apache2_module: name=rewrite state=present
       notify: restart apache
