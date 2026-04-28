@@ -6,16 +6,16 @@
   tasks:
     - name: Add an environment variable to remote user's shell
       lineinfile:
-        dest: /home/vagrant/.bashrc
+        dest: /home/vagrant/.profile
         regexp: '^ENV_VAR='
         line: "ENV_VAR=value"
 
     - name: Get the value of the above environment variable
-      shell: 'source /home/vagrant/.bashrc && echo $ENV_VAR'
+      shell: 'source /home/vagrant/.profile && echo $ENV_VAR'
       args:
         executable: /bin/bash
       register: foo
 
     - name: Print the value of the environment variable
       debug:
-        msg: "The variable is {{ foo }}"
+        msg: "The variable is {{ foo.stdout }}"
