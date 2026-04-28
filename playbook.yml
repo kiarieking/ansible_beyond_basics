@@ -6,11 +6,20 @@
   handlers:
     - name: restart apache
       service: name=apache2 state=restarted
+      notify: restart memcached
+    
+    - name: restart memcached
+      service: name=memcached state=restarted
 
   tasks:
     - name: Install Apache2
       apt: update_cache=true name=apache2 state=present
 
+    - name: Install memcached
+      apt: update_cache=true name=memcached state=present
+
     - name: Enable Apache rewrite module.
       apache2_module: name=rewrite state=present
-      notify: restart apache
+      notify: 
+        - restart apache
+        
