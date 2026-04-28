@@ -2,6 +2,8 @@
 - hosts: all
   remote_user: vagrant
   become: yes
+  vars_files:
+    - vars.yml
 
   tasks:
     - name: Add an environment variable to remote user's shell
@@ -32,5 +34,4 @@
       get_url:
         url: https://nbg1-speed.hetzner.com/100MB.bin
         dest: /home/vagrant/Downloads/
-      environment:
-        http_proxy: http://192.168.56.15:3128
+      environment: proxy_vars
