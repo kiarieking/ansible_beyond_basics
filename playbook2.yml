@@ -6,12 +6,13 @@
   tasks:
     - name: Add an environment variable to remote user's shell
       lineinfile:
-        dest: /home/vagrant/.profile
+        dest: /etc/environment
         regexp: '^ENV_VAR='
         line: "ENV_VAR=value"
+      become: yes
 
     - name: Get the value of the above environment variable
-      shell: 'source /home/vagrant/.profile && echo $ENV_VAR'
+      shell: 'source /etc/environment && echo $ENV_VAR'
       args:
         executable: /bin/bash
       register: foo
@@ -19,3 +20,17 @@
     - name: Print the value of the environment variable
       debug:
         msg: "The variable is {{ foo.stdout }}"
+
+    # Pre-task environment variables
+    - name: Install squid proxy server 
+      apt: name=squid state=present
+
+    - name: Start squid proxy
+      service: name=squid state=started
+
+    - name: Download a file, using example-proxy as a proxy
+      get_url:
+        url: https://nbg1-speed.hetzner.com/100MB.bin
+        dest: /home/vagrant/Downloads/
+      environment:
+        http_proxy: http://192.168.56.15:3128
