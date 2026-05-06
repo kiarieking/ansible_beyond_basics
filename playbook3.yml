@@ -7,22 +7,31 @@
     running: false
 
   tasks:
-    - name: Check python version
-      shell: python3 --version
-      register: python_version
+    # - name: Check python version
+    #   shell: python3 --version
+    #   register: python_version
 
-    - debug: var=python_version.stdout
+    # - debug: var=python_version.stdout
 
-    - name: Stop squid proxy server.
-      service: name=squid state=stopped
-      when: running
+    # - name: Stop squid proxy server.
+    #   service: name=squid state=stopped
+    #   when: running
 
-    - name: Install squid proxy
-      command: "sudo apt install squid"
-      register: output
-      changed_when: "'squid is already the newest version' not in output.stdout"
+    # - name: Install squid proxy
+    #   command: "sudo apt install squid"
+    #   register: output
+    #   changed_when: "'squid is already the newest version' not in output.stdout"
 
-    - name: Check if the word computer exists in a text
-      command: "cat /tmp/output1.txt"
-      register: output 
-      failed_when: "'computer' in output.stdout"
+    # - name: Check if the word computer exists in a text
+    #   command: "cat /tmp/output1.txt"
+    #   register: output 
+    #   failed_when: "'computer' in output.stdout"
+
+    - name: Run task on local host
+      command: "curl ifconfig.me"
+      register: curl_output
+      delegate_to: 127.0.0.1
+      become: no
+
+    - name: Get local pc public ip
+      debug: var=curl_output.stdout
