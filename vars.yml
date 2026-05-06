@@ -1,3 +1,4 @@
 vars:
   proxy_vars:
     http_proxy: http://192.168.56.15:3128
+

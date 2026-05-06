@@ -4,6 +4,8 @@
   become: yes
   vars_files:
     - vars.yml
+    - api_key.yml
+
   vars:
     foo: bar
 
@@ -40,3 +42,12 @@
 
     - debug:
         msg: "Variable foo is set to {{ foo }}"
+
+    - name: Echo api keys set on vars
+      shell: echo $API_KEY 
+      environment: 
+        API_KEY: "{{ my_api_key }}"
+      register: echo_result
+
+    - name: Show the result 
+      debug: var=echo_result.stdout
