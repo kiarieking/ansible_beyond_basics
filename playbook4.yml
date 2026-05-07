@@ -1,0 +1,30 @@
+---
+- hosts: all
+  remote_user: vagrant
+  become: yes
+
+  tasks:
+    - block:
+
+        - name: Create app directory
+          file: 
+            path: /opt/myapp
+            state: directory
+
+        - name: Copy app file
+          copy:
+            src: app.conf
+            dest: /opt/myapp/app.conf
+
+      rescue:
+
+        - name: Remove incomplete directory
+          file:
+            path: /opt/myapp
+            state: absent
+
+      always:
+
+        - name: Log completion
+          debug:
+            msg: "Deployment attempted"
