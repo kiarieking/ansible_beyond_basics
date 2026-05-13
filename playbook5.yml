@@ -3,8 +3,20 @@
   remote_user: vagrant
   become: yes
 
+  vars:
+    services:
+      - nginx
+      - git
+      - curl
+
   tasks:
     - import_tasks: imported_tasks.yml
 
     - name: Include os specific task 
       include_tasks: "{{ ansible_os_family }}.yml"
+
+    - name: Install packages dynamically
+      include_tasks: install_package.yml
+      loop: "{{ services }}"
+      loop_control:
+        loop_var: package_name
